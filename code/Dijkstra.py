@@ -156,6 +156,6 @@ if __name__ == '__main__':
             avg_dist_list.append(avg_dist)
             
     # Plot histogram of distance and number of nodes
-    plt.hist(count_list, 10, density = True, facecolor='b', alpha = 0.75)
+    plt.hist(count_list, 13, density = True, facecolor='b', alpha = 0.75)
     
     plt.hist(avg_dist_list, 10, density = True, facecolor='b', alpha = 0.75)
