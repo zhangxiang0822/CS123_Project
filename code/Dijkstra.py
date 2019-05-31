@@ -7,8 +7,25 @@ Created on Tue May 14 10:01:26 2019
 
 import pandas as pd
 import sys
+import matplotlib.pyplot as plt
 
 class Graph():
+    """
+    Graph class represents a graph structure
+    
+    Data Structure:
+        - nodes (set): set of all nodes (using set instead of list could simplfy
+                        edits to it)
+        - edge (dictionary of list): a dictionary of list, the key is node ID, 
+                                     the value is the list of its neighbor nodes
+                                     
+    Methods:
+        - add_node: add a node to nodes attribute
+        - add_edge: add a edge to edge structure
+        - find_minDistance: a function return the unvisited node with the minimum
+                            distance to the "from_node" argument
+        - dijkstra: implement Dijkstra algorithm
+    """
     def __init__(self):
         self.nodes = set()
         self.edge = {}
@@ -25,17 +42,17 @@ class Graph():
             self.edge[from_node].append(to_node)
 
     def find_minDistance(self, from_node, visited, dist): 
-        """        
-        if from_node not in self.edge:
-            return -1
-        for to_node in self.edge[from_node]: 
-            print("hahaha")
-            if visited[to_node] == False: 
-                min_temp = dist[to_node]
-                if min_temp < min:
-                    min = min_temp
-                    min_node = to_node
-                    print(min, min_node)
+        """
+        Return the unvisited node with the shotest distance to the given node
+        
+        Inputs:
+            - from_node: ID of the given node (our origin)
+            - visited (list): list indicating whether a node has been fully 
+                              iterated over (visited)
+            - dist (list): distance list to the given node (the origin)
+            
+        Output:
+            - min_node: ID of the found node
         """
         min = sys.maxsize
         min_node = -1
@@ -52,6 +69,16 @@ class Graph():
         return min_node
         
     def dijsktra(self, origin):
+        """
+        Main function implementing dijkstra algorithm
+        
+        Inputs:
+            - origin: ID of the given node
+            
+        Output:
+            - dist: list of distance to the origin. If they are not connected, the
+            distance value would be sys.maxsize
+        """
         visited = [False] * len(self.nodes)
         nodes_copy = self.nodes.copy()
         
@@ -86,129 +113,49 @@ class Graph():
             
         return dist   
 
-df = pd.read_csv('../data/sample_data.tsv', delimiter = "\t")
-#df = df.loc[0:10000, :]
-
-list_unique_patent_id = pd.unique(df[['patent_id', 'citation_id']].values.ravel('k'))
-
-dict_unique_patent_id = {}
-for index, item in enumerate(list_unique_patent_id):
-    dict_unique_patent_id[item] = index
-
-graph_citation = Graph()
-for index, item in df.iterrows():
-    patent_id   = dict_unique_patent_id[item["patent_id"]]
-    citation_id = dict_unique_patent_id[item["citation_id"]]
-    graph_citation.add_edge(patent_id, citation_id)
-
-count_list = []
-for i in range(10000):
-    print("The origion is", i)
-    hh = graph_citation.dijsktra(i)
-    count = 0
-    for j in hh:
-        if j != sys.maxsize:
-            count += 1
-    count_list.append(count)
+if __name__ == '__main__': 
+    # Read in sample node
+    df = pd.read_csv('../data/sample_data.tsv', delimiter = "\t")
     
-"""
-Code by Others
+    # As the first step, we assign an unique ID to each node. In later implementation,
+    # this ID would corresponds to their locations in the list structure.
+    list_unique_patent_id = pd.unique(df[['patent_id', 'citation_id']].values.ravel('k'))
 
-class Graph():
-    def __init__(self, vertices): 
-        self.V = vertices 
-        self.graph = [[0 for column in range(vertices)]  
-                      for row in range(vertices)] 
+    dict_unique_patent_id = {}
+    for index, item in enumerate(list_unique_patent_id):
+        dict_unique_patent_id[item] = index
+        
+    # Generate graph structure
+    graph_citation = Graph()
+    for index, item in df.iterrows():
+        patent_id   = dict_unique_patent_id[item["patent_id"]]
+        citation_id = dict_unique_patent_id[item["citation_id"]]
+        graph_citation.add_edge(patent_id, citation_id)
     
-    def printSolution(self, dist): 
-        print("Vertex tDistance from Source")
-        for node in range(self.V): 
-            print(node, "t", dist[node])
+    """
+    As a simple implementation, I compute the number of connected nodes and corresponding
+    distance for each node in the graph.
+    """
+    count_list = []
+    avg_dist_list = []
+    for i in range(10000):
+        print("The origion is", i)
+        hh = graph_citation.dijsktra(i)
+        count = 0
+        dist_list = []
+        for dist in hh:
+            if dist != sys.maxsize:
+                count += 1
+                count_list.append(count)
+                dist_list.append(dist)
+        
+        if len(dist_list) == 0:
+            continue
+        else:
+            avg_dist = sum(dist_list) / len(dist_list)
+            avg_dist_list.append(avg_dist)
             
-    def minDistance(self, dist, sptSet): 
-  
-        # Initilaize minimum distance for next node 
-        min = sys.maxsize
-  
-        # Search not nearest vertex not in the  
-        # shortest path tree 
-        for v in range(self.V): 
-            if dist[v] < min and sptSet[v] == False: 
-                min = dist[v] 
-                min_index = v 
-  
-        return min_index 
+    # Plot histogram of distance and number of nodes
+    plt.hist(count_list, 10, density = True, facecolor='b', alpha = 0.75)
     
-    def dijkstra(self, origin): 
-      
-            dist = [sys.maxsize] * self.V 
-            dist[origin] = 0
-            sptSet = [False] * self.V 
-      
-            for cout in range(self.V): 
-      
-                # Pick the minimum distance vertex from  
-                # the set of vertices not yet processed.  
-                # u is always equal to src in first iteration 
-                u = self.minDistance(dist, sptSet) 
-      
-                # Put the minimum distance vertex in the  
-                # shotest path tree 
-                sptSet[u] = True
-      
-                # Update dist value of the adjacent vertices  
-                # of the picked vertex only if the current  
-                # distance is greater than new distance and 
-                # the vertex in not in the shotest path tree 
-                for v in range(self.V): 
-                    if self.graph[u][v] > 0 and sptSet[v] == False and dist[v] > dist[u] + self.graph[u][v]: 
-                            dist[v] = dist[u] + self.graph[u][v] 
-      
-            self.printSolution(dist) 
-            
-g = Graph(9) 
-g.graph = [[0, 1, 0, 0, 0, 0, 0, 1, 0], 
-           [1, 0, 1, 0, 0, 0, 0, 1, 0], 
-           [0, 1, 0, 1, 0, 1, 0, 0, 1], 
-           [0, 0, 1, 0, 1, 1, 0, 0, 0], 
-           [0, 0, 0, 1, 0, 1, 0, 0, 0], 
-           [0, 0, 1, 1, 1, 0, 1, 0, 0], 
-           [0, 0, 0, 0, 0, 1, 0, 1, 1], 
-           [1, 1, 0, 0, 0, 0, 1, 0, 1], 
-           [0, 0, 1, 0, 0, 0, 1, 1, 0] 
-          ]; 
-
-## Test
-g1 = Graph() 
-g1.add_edge(0, 1)
-g1.add_edge(0, 7)
-g1.add_edge(1, 0)
-g1.add_edge(1, 2)
-g1.add_edge(1, 7)
-g1.add_edge(2, 1)
-g1.add_edge(2, 3)
-g1.add_edge(2, 5)
-g1.add_edge(2, 8)
-g1.add_edge(3, 2)
-g1.add_edge(3, 4)
-g1.add_edge(3, 5)
-g1.add_edge(4, 3)
-g1.add_edge(4, 5)
-g1.add_edge(5, 2)
-g1.add_edge(5, 3)
-g1.add_edge(5, 4)
-g1.add_edge(5, 6)
-g1.add_edge(6, 5)
-g1.add_edge(6, 7)
-g1.add_edge(6, 8)
-g1.add_edge(7, 0)
-g1.add_edge(7, 1)
-g1.add_edge(7, 6)
-g1.add_edge(7, 8)
-g1.add_edge(8, 2)
-g1.add_edge(8, 6)
-g1.add_edge(8, 7)
-  
-haha = g1.dijsktra(1)    
-g.dijkstra(1);  
-"""
+    plt.hist(avg_dist_list, 10, density = True, facecolor='b', alpha = 0.75)
