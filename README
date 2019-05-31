@@ -2,6 +2,15 @@
 
 Repository for CMSC 12300 (Computer Science with Applications-3) Group Project
 
+# Code Structure
+All code processing results are put under "code" folder. They are listed below
+- data_preprocessing.py
+- data preprocessing2.py
+- Dijkstra_smalldata.py
+- Dijkstra_parallel.py
+- data_preprocessing_smalldata.py
+
+
 # Contributors
 Anhua Chen
 
