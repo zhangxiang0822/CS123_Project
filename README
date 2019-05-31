@@ -16,9 +16,10 @@ All code processing results are put under "code" folder. They are listed below
   # Summary Statistics
   - count_citation_byindustry
   - count_citation_byyear
+  - count_citation_flow
 
 # Contributors
-Anhua Chen
+Anhua Chen [ChenAnHua](https://github.com/ChenAnhua)
 
 David Liu
 
