@@ -1,0 +1,27 @@
+## University of Chicago | Spring 2019
+
+Repository for CMSC 12300 (Computer Science with Applications-3) Group Project
+
+## Code Structure
+All code processing results are put under "code" folder. They are listed below
+  # Data Processing
+  - data_preprocessing.py:  This is the code merging "nber data" with "nber_subcategory dataset" on Google Cloud
+  - data preprocessing2.py: This is the code merging output of "data_preprocessing.py" to citation dataset
+  - data_preprocessing_smalldata.py: This is the code preparing data for running Dijkstra algorithm on small data
+
+  # Shortest Path
+  - Dijkstra_smalldata.py:  This is the code implementing Dijkstra algorithm on small data set (using sample input data)
+  - Dijkstra_parallel.py:   This is the code implementing Dijkstra algorithm (in fact, breadth-first search) on Google Cloud
+  
+  # Summary Statistics
+  - count_citation_byindustry
+  - count_citation_byyear
+
+# Contributors
+Anhua Chen
+
+David Liu
+
+Xiang Zhang [zhangxiang0822](https://github.com/zhangxiang0822)
+
+Xiuyuan Zhang
