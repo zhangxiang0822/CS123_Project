@@ -6,9 +6,9 @@ Repository for CMSC 12300 (Computer Science with Applications-3) Group Project
 All code processing results are put under "code" folder. They are listed below
 - data_preprocessing.py: This is the code merging "nber data" with "nber_subcategory dataset" on Google Cloud
 
-- data preprocessing2.py
-- Dijkstra_smalldata.py
-- Dijkstra_parallel.py
+- data preprocessing2.py: This is the code merging output of "data_preprocessing.py" to citation dataset
+- Dijkstra_smalldata.py: This is the code implementing Dijkstra algorithm on small data set (using sample input data).
+- Dijkstra_parallel.py: 
 - data_preprocessing_smalldata.py
 
 
