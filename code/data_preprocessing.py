@@ -12,10 +12,12 @@
 
 import mrjob
 from mrjob.job import MRJob
+from mrjob.protocol import RawValueProtocol
  
 class NBER_merge(MRJob):
     
-    # OUTPUT_PROTOCOL =  mrjob.protocol.TextValueProtocol
+    #INPUT_PROTOCOL = RawValueProtocol
+    #OUTPUT_PROTOCOL = RawValueProtocol
     #MRJob.SORT_VALUES = True
 
     #def __init__(self, *args, **kwargs):
@@ -40,7 +42,13 @@ class NBER_merge(MRJob):
             help = "Whether the mapreducer is running on local or cloud")
         #self.add_file_arg('--table1', help = "Main table to be joined")
         #self.add_file_arg('--table2', help = "Secondary table to be joined")
-        
+
+    def jobconf(self):
+        orig_jobconf = super(NBER_merge, self).jobconf()
+        custom_jobconf = {
+            'mapreduce.job.reduces': 1
+        }
+        return mrjob.conf.combine_dicts(orig_jobconf, custom_jobconf)
 
     def mapper(self, _, line):
         '''
