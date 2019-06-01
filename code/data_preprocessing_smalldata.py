@@ -9,7 +9,6 @@ import pandas as pd
 import sys
 
 df = pd.read_csv('../data/sample_data.tsv', delimiter = "\t")
-df = df.loc[0:100, :]
 
 list_unique_patent_id = pd.unique(df[['patent_id', 'citation_id']].values.ravel('k'))
 
