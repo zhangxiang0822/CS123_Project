@@ -2,11 +2,34 @@
 
 Repository for CMSC 12300 (Computer Science with Applications-3) Group Project
 
-## Code Structure
+This readMe is structured as following:
+I. PROJECT GOAL
+II. CODE STRUCTURE
+III. HOW TO RUN THE CODE
+IV. TO DO LIST
+
+
+## I. PROJECT GOAL
+
+We try to understand the patent citation pattern across US industries from 1970 up to date. This includes how the network strucuture of
+industry-to-industry patent citation has been shifting over time. What does the intra-industry vs cross-industry patent citation look like.
+And how to find the shortest path between certain patent-citation pair in a large network structure.
+
+Our project highlights two techniques: 
+  - First is merging large data using MapReduce and its implementation on Google Cloud plateform
+    Due to the difference in infrastructure/configuration between Google cloud service (GCS) and local machine. We debug the discrepancy 
+    between these two scenarios and modify our code to be compatible with cloud computing.
+  - Second important feature is to perform a parallel version (base on mapreduce) shortest-path algorithm (Dijkstra)
+    The main challenge of this task is to figure out a way to parallelize local-machine-based Dijsktra algorithm and modify it to be
+    compatible with MapReduce job structure and big data computing on GCS.
+
+## II. CODE STRUCTURE
+
+
 All code processing results are put under "code" folder. They are listed below
   # Data Processing
   - data_preprocessing.py:  This is the code merging "nber data" with "nber_subcategory dataset" on Google Cloud
-  - data preprocessing2.py: This is the code merging output of "data_preprocessing.py" to citation dataset
+  - data preprocessing2.py: This is the code merging output of "data_preprocessing.py" to citation dataset on Google Cloud
   - data_preprocessing_smalldata.py: This is the code preparing data for running Dijkstra algorithm on small data
 
   # Shortest Path
@@ -17,6 +40,24 @@ All code processing results are put under "code" folder. They are listed below
   - count_citation_byindustry
   - count_citation_byyear
   - count_citation_flow
+
+## III. HOW TO RUN THE CODE
+Suggestion: please try running it on local first!
+
+  i. first-step merging
+      python data_preprocessing.py -r dataproc ../data/nber_subcategory.tsv ../data/nber_sample.tsv --runner_type="GCS" --merger_type="left" > ../data/data_merge1.json
+  ii. second-step merging (must be run only after first merging is complete!)
+      python data_preprocessing2.py -r dataproc ../data/sample_data.tsv ../data/data_merge1.json --runner_type="GCS" --merger_type="left" > ../data/data_merge2.json
+  iii. format data before Dijsktra
+      python Dijkstra_parallel.py ../data/sample_data_formated.csv --start_point="1" --iteration=3 > ../data/shortest_path_data.json
+  iv. run summary statistics and interpret output
+     (to be finished)
+
+## IV. to-do list
+  i.  Finish running the whole data (98 mil obs) on Google cloud (currently have result for a smaller version around 100 K observation)
+  ii. Run parallel version Dijkstra alg. on the full version results from data-preprocessing (currently have result for a smaller version around 100 K observation)
+  iii.Interpret results from step ii and visualize the results
+  iv. present results in the final report
 
 # Contributors
 Anhua Chen [ChenAnHua](https://github.com/ChenAnhua)
