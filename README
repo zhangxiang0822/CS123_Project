@@ -46,7 +46,7 @@ Suggestion: please try running it on local first!
 
   i. first-step merging
       python data_preprocessing.py -r dataproc ../data/nber_subcategory.tsv ../data/nber_sample.tsv --runner_type="GCS" --merger_type="left" > ../data/data_merge1.json
-  ii. second-step merging (must be run only after first merging is complete!)
+  ii. second-step merging (must be run only after first merging is complete! Due to oversize data, we only put data_merge1_small.json in the dir)
       python data_preprocessing2.py -r dataproc ../data/sample_data.tsv ../data/data_merge1.json --runner_type="GCS" --merger_type="left" > ../data/data_merge2.json
   iii. format data before Dijsktra
       python Dijkstra_parallel.py ../data/sample_data_formated.csv --start_point="1" --iteration=3 > ../data/shortest_path_data.json
