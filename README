@@ -53,12 +53,13 @@ Suggestion: please try running it on local first!
   iv. run summary statistics and interpret output
      (to be finished)
 
-## IV. to-do list
-  i.  Finish running the whole data (98 mil obs) on Google cloud (currently have result for a smaller version around 100 K observation)
-  ii. Run parallel version Dijkstra alg. on the full version results from data-preprocessing (currently have result for a smaller version around 100 K observation)
-  iii.Interpret results from step ii and visualize the results
-  iv. present results in the final report
-
+## IV. New update
+  i. We finished running all the merging code on GCS and obtained correct results
+  ii. Due to time limit, we only test the parallelized Dijsktra algorithm on a relatively small scaled data
+  iii. We generate the results: patent citation pattern across industry and a graphic illustration of shortest-path detection algorithm.
+       (please see the results section of the final report)
+  iv. we didn't change much of the code, but focusing more on the implementation of algorithm.
+  
 # Contributors
 Anhua Chen [ChenAnHua](https://github.com/ChenAnhua)
 
